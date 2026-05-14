@@ -1,0 +1,6 @@
+{
+  "extends": ["./node_modules/ox-standard/.oxlintrc.json"],
+  "rules": {
+    "eqeqeq": ["error", "always", { "null": "ignore" }]
+  }
+}

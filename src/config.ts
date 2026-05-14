@@ -1,3 +1,4 @@
+import { geocodeAddress } from './geocode'
 import type { Env } from './types'
 
 export const MIN_PERCENTAGE_DISCOUNT = 20
@@ -9,12 +10,30 @@ export interface LocationConfig {
   country: string
   locationLabel: string
   targetUrl: string
+  latitude?: number
+  longitude?: number
 }
 
-export function loadLocationConfig(env: Env): LocationConfig {
-  const postalCode = required(env.POSTAL_CODE, 'POSTAL_CODE')
-  const country = required(env.COUNTRY, 'COUNTRY').toLowerCase()
+// Resolves the runtime location config from env. Two modes:
+//   1. ADDRESS set         -> geocode (cached 30d) -> postcode + lat/lng
+//   2. POSTAL_CODE set     -> postcode-wide query, no per-address filter
+export async function loadLocationConfig(env: Env): Promise<LocationConfig> {
   const locationLabel = required(env.LOCATION_LABEL, 'LOCATION_LABEL')
+
+  if (env.ADDRESS && env.ADDRESS.trim().length > 0) {
+    const geo = await geocodeAddress(env.ADDRESS.trim())
+    return {
+      postalCode: geo.postalCode,
+      country: geo.countryCode,
+      locationLabel,
+      latitude: geo.latitude,
+      longitude: geo.longitude,
+      targetUrl: `https://www.lieferando.de/en/delivery/food/${geo.postalCode}`,
+    }
+  }
+
+  const postalCode = required(env.POSTAL_CODE, 'POSTAL_CODE (or ADDRESS)')
+  const country = required(env.COUNTRY, 'COUNTRY').toLowerCase()
   return {
     postalCode,
     country,

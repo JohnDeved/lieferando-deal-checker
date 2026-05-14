@@ -26,7 +26,7 @@ export default {
 }
 
 async function runCheck(env: Env): Promise<Deal[]> {
-  const location = loadLocationConfig(env)
+  const location = await loadLocationConfig(env)
   const foundAt = new Date().toISOString()
   const rawOffers = await fetchRawOffers(location)
 

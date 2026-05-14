@@ -1,6 +1,13 @@
 # Copy this to `.dev.vars` for local `wrangler dev`. Do NOT commit `.dev.vars`.
 # For production, set these via `wrangler secret put <NAME>` or in the Cloudflare dashboard.
+
 DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
-POSTAL_CODE="00000"
-COUNTRY="de"
-LOCATION_LABEL="Your City 00000"
+LOCATION_LABEL="Your Neighborhood"
+
+# Option A — exact street address (recommended; geocoded once via Nominatim,
+# then the API is filtered to restaurants that actually deliver there):
+ADDRESS="Your Street 1, Your City"
+
+# Option B — postcode-wide query (used as a fallback when ADDRESS is unset):
+# POSTAL_CODE="00000"
+# COUNTRY="de"

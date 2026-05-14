@@ -26,12 +26,14 @@ $EDITOR .dev.vars
 
 # 3. Production secrets / vars
 npx wrangler secret put DISCORD_WEBHOOK_URL
-npx wrangler secret put POSTAL_CODE
-npx wrangler secret put COUNTRY
 npx wrangler secret put LOCATION_LABEL
+npx wrangler secret put ADDRESS                 # e.g. "Your Street 1, Your City"
+# OR (fallback if you don't want to use an address):
+# npx wrangler secret put POSTAL_CODE
+# npx wrangler secret put COUNTRY
 ```
 
-`POSTAL_CODE` + `COUNTRY` (e.g. `de`) drive the discovery query. `LOCATION_LABEL` is a free-form string shown in the Discord embed footer.
+`ADDRESS` is the recommended mode: it's geocoded once via Nominatim (cached 30 days in the Cloudflare cache), then the API call is filtered to restaurants that actually deliver to that exact spot. Without `ADDRESS`, the worker falls back to a `POSTAL_CODE` + `COUNTRY` postcode-wide query. `LOCATION_LABEL` is a free-form string shown in the Discord embed footer.
 
 ## Development
 

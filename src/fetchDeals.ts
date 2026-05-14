@@ -47,7 +47,12 @@ interface ApiResponse {
 }
 
 export async function fetchRawOffers(location: LocationConfig): Promise<RawOffer[]> {
-  const url = `${API_BASE}/discovery/${location.country}/restaurants/enriched/bypostcode/${location.postalCode}?ratingsOutOfFive=true&limit=200`
+  const params = new URLSearchParams({ ratingsOutOfFive: 'true', limit: '200' })
+  if (location.latitude != null && location.longitude != null) {
+    params.set('latitude', String(location.latitude))
+    params.set('longitude', String(location.longitude))
+  }
+  const url = `${API_BASE}/discovery/${location.country}/restaurants/enriched/bypostcode/${location.postalCode}?${params.toString()}`
 
   const response = await fetch(url, { headers: API_HEADERS })
   if (!response.ok) {

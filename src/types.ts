@@ -30,7 +30,8 @@ export interface Deal {
 export interface Env {
   DEALS_KV: KVNamespace
   DISCORD_WEBHOOK_URL: string
-  POSTAL_CODE: string
-  COUNTRY: string
+  POSTAL_CODE?: string
+  COUNTRY?: string
   LOCATION_LABEL: string
+  ADDRESS?: string
 }

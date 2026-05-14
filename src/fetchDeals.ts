@@ -24,6 +24,7 @@ interface ApiRestaurant {
   id: string
   name: string
   uniqueName: string
+  isDelivery?: boolean
   logoUrl?: string
   rating?: { count?: number; starRating?: number }
   cuisines?: { name?: string }[]
@@ -64,6 +65,8 @@ export async function fetchRawOffers(location: LocationConfig): Promise<RawOffer
 
   const result: RawOffer[] = []
   for (const r of restaurants) {
+    // Skip restaurants that don't offer delivery to this address at all.
+    if (r.isDelivery === false) continue
     for (const deal of r.deals ?? []) {
       const offerType = deal.offerType ?? ''
       const description = deal.description ?? ''

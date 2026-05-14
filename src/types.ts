@@ -15,6 +15,7 @@ export interface RestaurantInfo {
   driveDistanceMeters?: number
   isOpen?: boolean
   nextAvailability?: string
+  deliversToAddress?: boolean
 }
 
 export interface Deal {

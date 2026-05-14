@@ -65,8 +65,6 @@ export async function fetchRawOffers(location: LocationConfig): Promise<RawOffer
 
   const result: RawOffer[] = []
   for (const r of restaurants) {
-    // Skip restaurants that don't offer delivery to this address at all.
-    if (r.isDelivery === false) continue
     for (const deal of r.deals ?? []) {
       const offerType = deal.offerType ?? ''
       const description = deal.description ?? ''
@@ -97,6 +95,7 @@ function toInfo(r: ApiRestaurant, location: LocationConfig): RestaurantInfo {
     driveDistanceMeters: r.driveDistanceMeters,
     isOpen: r.availability?.delivery?.isOpen,
     nextAvailability: r.availability?.delivery?.nextAvailability?.from,
+    deliversToAddress: r.isDelivery,
   }
 }
 

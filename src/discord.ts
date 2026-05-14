@@ -33,7 +33,12 @@ export function buildEmbed(deal: Deal, locationLabel: string): Record<string, un
 
   const savingsLine = deal.savings?.summary ?? `_${fallbackSavings(deal)}_`
 
-  const description = [headline, savingsLine].join('\n')
+  const pickupOnly = r.deliversToAddress === false
+  const descriptionParts = [headline, savingsLine]
+  if (pickupOnly) {
+    descriptionParts.push('📦 **Pickup only** — does not deliver to your address')
+  }
+  const description = descriptionParts.join('\n')
 
   const fields = buildFields(deal)
 
